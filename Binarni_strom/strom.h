@@ -19,6 +19,8 @@ class Tree
 		void printPreorder(NODE* current); // koren - levy - pravy
 		void printInorder(NODE* current);
 		void printPostorder(NODE* current);
-		void removeElement(int _n);
+		NODE* findMin(NODE* current);
+		NODE* getParent(NODE* current, int _n);
+		void removeElement(NODE* gRoot, int _n);
 		~Tree();
 };

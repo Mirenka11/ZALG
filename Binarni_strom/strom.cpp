@@ -12,7 +12,7 @@ Tree::Tree()
 
 void Tree::addElement(int _n) 
 {
-	//TODO jak by se tohle dalo udělat rekurzí??? 
+	//TODO bylo by k něčemu udělat o taky rekurzí??? 
 	
 	/*Vytvoreni noveho uzloveho bodu*/
 	NODE* newNode = new NODE;
@@ -83,6 +83,22 @@ void Tree::printPostorder(NODE* current)
     cout << current->n << " ";
 }
 
+NODE* Tree::getParent(NODE* current, int _n)
+{
+	if (current->n == _n) return nullptr;
+	/*	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 	DŮLEŽITÝ PŘEDPOKLAD: _n JE PRVKEM BINÁRNÍHO STROMU	
+	 	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 */
+	 while(current->left->n != _n && current->right->n != _n)
+	 {
+	 	// TODO
+	 }
+
+
+
+}
+
 NODE* Tree::findMin(NODE* current)
 {
 	while(current->left != nullptr)
@@ -92,19 +108,36 @@ NODE* Tree::findMin(NODE* current)
 void Tree::removeElement(NODE* gRoot, int _n)
 {
 	NODE* current = getElement(gRoot, _n); // tohle chci smazat
-	if(current->left == nullptr && current-> right == nullptr)
-		delete current; 
-		/*ok, tohle bylo easy, ALE co když tenhle prvek není koncový???*/
-	else if() //TODO
-	 /*strom pokračuje jen jedním směrem -- prvek který chci smazat nahradím jeho levým/pravým následovníkem (jasně že tím, který není prázdný)*/
-	else //TODO
-	/*odstraňovaný uzel je kdesi uprostřed stromu -- nahradím jej hodnotou nejmenšího prvku v jeho pravém podstromu a mělo by to být OK */
 	
-	
+	if(current->right == nullptr || current->left == nullptr)
+	/*strom pokračuje nejvýše jedním směrem -- prvek který chci smazat nahradím jeho levým/pravým následovníkem (jasně že tím, který není prázdný). 
+	pokud strom nepokračuje, můžu prvek beztrestně smazat*/
+	{
+		if(current->left != nullptr) //můžu jít doleva
+		{
+			NODE* nahradnik = getParent(current, _n);
+			// ověřit jestli nahradnik neni nullptr
+			// nahradit co je potřeba
+		}
+		else if(current->right != nullptr) // můžu jít doleva
+		{	
+			NODE* nahradnik = getParent(current, _n);
+			//TODO
+		}
+		else delete current;
+	}
+	 
+	else //*odstraňovaný uzel pokračuje na obě strany -- nahradím jej hodnotou nejmenšího prvku v jeho pravém podstromu a mělo by to být OK
+	{
+		NODE* nahradnik = findMin(current->right);
+		current->n = nahradnik->n;
+		delete nahradnik;
+	}	
 }
 Tree::~Tree()
 {
 	//TODO
+	//aby se Valgrind nezbláznil
 }
 
 
@@ -117,6 +150,15 @@ int main()
 	binarniStrom.addElement(15);
 	binarniStrom.addElement(65);
 	binarniStrom.addElement(5);
+	/*
+				  50
+			   /     \
+			  10      70
+			 /  \    /  \
+			5   15 65   
+	
+	
+	*/
 	
 	binarniStrom.printPreorder(binarniStrom.gRoot);
 	cout << endl;
@@ -153,8 +195,28 @@ int main()
 	if(!binarniStrom.getElement(binarniStrom.gRoot, 420))
 		cout << "420 - OK" << endl;
 		
+	cout << endl;
 		
-
+	
+	binarniStrom.removeElement(binarniStrom.gRoot, 10);
+	binarniStrom.printPreorder(binarniStrom.gRoot);
+	cout << endl;
+	
+	binarniStrom.removeElement(binarniStrom.gRoot, 15);
+	binarniStrom.printPreorder(binarniStrom.gRoot);
+	cout << endl;
+	
+	binarniStrom.removeElement(binarniStrom.gRoot, 70);
+	binarniStrom.printPreorder(binarniStrom.gRoot);
+	cout << endl;
+	
+	binarniStrom.removeElement(binarniStrom.gRoot, 65);
+	binarniStrom.printPreorder(binarniStrom.gRoot);
+	cout << endl;
+	
+	binarniStrom.removeElement(binarniStrom.gRoot, 50);
+	binarniStrom.printPreorder(binarniStrom.gRoot);
+	cout << endl;
 
  
 
